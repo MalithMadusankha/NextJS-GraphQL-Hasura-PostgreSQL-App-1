@@ -17,7 +17,7 @@ export default function Dashboard(params) {
                 </h5>
                 <div>
                   <label
-                    for="name"
+                    htmlFor="name"
                     className="mb-2 block text-sm font-medium text-white dark:text-gray-300"
                   >
                     Task name
@@ -33,7 +33,7 @@ export default function Dashboard(params) {
                 </div>
                 <div>
                   <label
-                    for="password"
+                    htmlFor="password"
                     className="mb-2 block text-sm font-medium text-white dark:text-gray-300"
                   >
                     Description
