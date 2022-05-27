@@ -56,7 +56,7 @@ export default function Navbar() {
       <MobileNav open={open} setOpen={setOpen} />
       <div className="flex w-3/12 items-center text-white">
         <a className="text-2xl font-semibold " href="/">
-          Kasper Global
+          kasper
         </a>{' '}
       </div>
       <div className="flex w-9/12 items-center justify-end">

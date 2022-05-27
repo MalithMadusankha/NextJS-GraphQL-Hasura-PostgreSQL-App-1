@@ -13,11 +13,24 @@ const Login = () => {
   const [signUpEmail, setSignUpEmail] = useState('')
   const [signUpPassword, setSignUpPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
+  const [isMatchPassword, setIsMatchPassword] = useState(
+    'flex w-64 items-center rounded-xl bg-gray-100 p-1'
+  )
+  const [isMatch, setIsMatch] = useState(true)
 
   const handleSignUp = async (e) => {
     e.preventDefault()
     try {
-      await SignUp(signUpEmail, signUpPassword)
+      console.log(signUpPassword === confirmPassword)
+      if (signUpPassword === confirmPassword)
+        await SignUp(signUpEmail, signUpPassword)
+      else {
+        console.log('else')
+        isMatch(false)
+        setIsMatchPassword(
+          'flex w-64 items-center rounded-xl border-2 border-red-500 bg-gray-100 p-1'
+        )
+      }
     } catch (err) {}
   }
 
@@ -38,9 +51,7 @@ const Login = () => {
       <main className="flex w-full flex-1 flex-col items-center justify-center px-20 text-center">
         <div className="flex w-2/3 max-w-4xl rounded-2xl bg-white shadow-2xl">
           <div className="w-3/5 p-5">
-            <div className="text-left font-bold text-blue-500">
-              Kasper Global
-            </div>
+            <div className="text-left font-bold text-blue-500">kasper</div>
             <div className="py-10">
               <h2 className="mb-2 text-3xl font-bold text-blue-500 ">
                 Sign In To Account
@@ -117,14 +128,25 @@ const Login = () => {
                 </div>
               </div>
               <div className="mb-10 flex flex-col items-center">
-                <div className="flex w-64 items-center rounded-xl bg-gray-100 p-1">
+                <div className={isMatchPassword}>
                   <MdLockOutline className="m-2 text-gray-400" />{' '}
                   <input
                     type="password"
                     name="confirm-password"
                     placeholder="confirm password"
                     className="flex-1 bg-gray-100 text-sm text-black outline-none"
-                    onChange={(e) => setConfirmPassword(e.target.value)}
+                    onChange={(e) => {
+                      setConfirmPassword(e.target.value)
+                      if (confirmPassword === signUpPassword) {
+                        setIsMatchPassword(
+                          'flex w-64 items-center rounded-xl bg-gray-100 p-1'
+                        )
+                      } else {
+                        setIsMatchPassword(
+                          'flex w-64 items-center rounded-xl border-2 border-red-500 bg-gray-100 p-1'
+                        )
+                      }
+                    }}
                     value={confirmPassword}
                   />
                 </div>
