@@ -1,93 +1,17 @@
-import { useState } from 'react'
-
-function NavLink({ to, children }) {
-  return (
-    <a href={to} className={`mx-4`}>
-      {children}
-    </a>
-  )
-}
-function MobileNav({ open, setOpen }) {
-  return (
-    <div
-      className={`absolute top-0 left-0 h-screen w-screen transform bg-white ${
-        open ? '-translate-x-0' : '-translate-x-full'
-      } drop-shadow-md filter transition-transform duration-300 ease-in-out `}
-    >
-      <div className="flex h-20 items-center justify-center bg-white drop-shadow-md filter">
-        {' '}
-        {/*logo container*/}
-        <a className="text-xl font-semibold" href="/">
-          LOGO
-        </a>
-      </div>
-      <div className="ml-4 flex flex-col">
-        <a
-          className="my-4 text-xl font-medium"
-          href="/about"
-          onClick={() =>
-            setTimeout(() => {
-              setOpen(!open)
-            }, 100)
-          }
-        >
-          About
-        </a>
-        <a
-          className="my-4 text-xl font-normal"
-          href="/contact"
-          onClick={() =>
-            setTimeout(() => {
-              setOpen(!open)
-            }, 100)
-          }
-        >
-          Contact
-        </a>
-      </div>
-    </div>
-  )
-}
-
-export default function Navbar() {
-  const [open, setOpen] = useState(false)
+import Link from 'next/link'
+export default function Navbar({ auth }) {
+  const { logout } = auth
   return (
     <nav className="flex  items-center bg-blue-500 px-4 py-1 drop-shadow-md filter">
-      <MobileNav open={open} setOpen={setOpen} />
-      <div className="flex w-3/12 items-center text-white">
-        <a className="text-2xl font-semibold " href="/">
-          Kasper Global
-        </a>{' '}
+      <div className="flex w-4/12  items-center text-white">
+        <Link href="/dashboard">
+          <a className="text-2xl font-semibold ">kasper</a>
+        </Link>
       </div>
-      <div className="flex w-9/12 items-center justify-end">
-        <div
-          className="relative z-50 flex h-8 w-8 flex-col items-center justify-between md:hidden"
-          onClick={() => {
-            setOpen(!open)
-          }}
-        >
-          {/* hamburger button */}
-          <span
-            className={`h-1 w-full transform rounded-lg bg-black transition duration-300 ease-in-out ${
-              open ? 'translate-y-3.5 rotate-45' : ''
-            }`}
-          />
-          <span
-            className={`h-1 w-full rounded-lg bg-black transition-all duration-300 ease-in-out ${
-              open ? 'w-0' : 'w-full'
-            }`}
-          />
-          <span
-            className={`h-1 w-full transform rounded-lg bg-black transition duration-300 ease-in-out ${
-              open ? '-translate-y-3.5 -rotate-45' : ''
-            }`}
-          />
-        </div>
-
-        <div className="hidden text-sm text-white md:flex">
-          <NavLink to="/contact">CONTACT</NavLink>
-          <NavLink to="/about">ABOUT</NavLink>
-        </div>
+      <div className="flex w-8/12 items-center justify-end">
+        <button className="text-sm font-medium text-white" onClick={logout}>
+          Sign Out
+        </button>
       </div>
     </nav>
   )
