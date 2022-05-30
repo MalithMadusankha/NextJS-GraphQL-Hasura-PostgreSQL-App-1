@@ -1,8 +1,9 @@
+import useAuth from '../hook/auth'
+
 export default async function Tasks() {
   try {
     let results = await fetch('https://m-demo-1.hasura.app/v1/graphql', {
       method: 'POST',
-
       headers: new Headers({
         'x-hasura-admin-secret':
           'xXx2JTXihpVXh8O0KIkaacazZLFiRQ4jQqVhAnaMvyNr131tmuEFRjrTNhXGwH04',
@@ -26,7 +27,6 @@ export default async function Tasks() {
 export async function CreateTask(taskName, description) {
   let results = await fetch('https://m-demo-1.hasura.app/v1/graphql', {
     method: 'POST',
-
     headers: new Headers({
       'x-hasura-admin-secret':
         'xXx2JTXihpVXh8O0KIkaacazZLFiRQ4jQqVhAnaMvyNr131tmuEFRjrTNhXGwH04',

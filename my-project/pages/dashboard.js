@@ -1,11 +1,13 @@
 import { useState } from 'react'
 import { useRouter } from 'next/router'
-import Tasks, { CreateTask } from '../service/task'
+import Tasks, { CreateTask } from '../src/service/TaskService'
+import { withProtected } from '../src/hook/route'
+import { VscLoading } from 'react-icons/vsc'
 
-export default function Dashboard({ tasks }) {
+function Dashboard({ tasks }) {
   const [taskName, setTaskName] = useState('')
   const [description, setDescription] = useState('')
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(false)
   const router = useRouter()
   const handleSubmite = async (e) => {
     e.preventDefault()
@@ -69,12 +71,18 @@ export default function Dashboard({ tasks }) {
                   ></textarea>
                 </div>
                 <div className="flex justify-center">
-                  <button
-                    type="submit"
-                    className="inline-block rounded-full border-2 border-white py-2 px-12 font-semibold text-white hover:bg-white hover:text-blue-500"
-                  >
-                    Save
-                  </button>
+                  {loading ? (
+                    <div className="inline-block rounded-full border-2 border-white py-2 px-12 font-semibold text-white hover:bg-white hover:text-blue-500">
+                      <VscLoading className="mr-3 animate-spin text-2xl" />
+                    </div>
+                  ) : (
+                    <button
+                      type="submit"
+                      className="inline-block rounded-full border-2 border-white py-2 px-12 font-semibold text-white hover:bg-white hover:text-blue-500"
+                    >
+                      Save
+                    </button>
+                  )}
                 </div>
               </form>
             </div>
@@ -86,25 +94,30 @@ export default function Dashboard({ tasks }) {
               <div className="ml-7 mb-2 inline-block w-10 border-2 border-blue-500"></div>
             </div>
             <div className="flex flex-wrap">
-              {tasks.tasks.map((task, key) => {
-                return (
-                  <a
-                    key={key}
-                    href="#"
-                    className="m-3 block w-60 max-w-sm rounded-lg border border-blue-300 bg-white p-6 shadow-md hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700"
-                  >
-                    <h5 className="mb-2 text-lg font-bold tracking-tight text-gray-900 dark:text-white">
-                      {task.task_name}
-                    </h5>
-                    <p className="text-sm font-normal text-gray-700 dark:text-gray-400">
-                      {task.description.slice(0, 60)}
-                      {task.description && task.description.length > 60 && (
-                        <span className="text-blue-500"> read more . . .</span>
-                      )}
-                    </p>
-                  </a>
-                )
-              })}
+              {tasks &&
+                tasks.tasks.length > 0 &&
+                tasks.tasks.map((task, key) => {
+                  return (
+                    <a
+                      key={key}
+                      href="#"
+                      className="m-3 block w-60 max-w-sm rounded-lg border border-blue-300 bg-white p-6 shadow-md hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700"
+                    >
+                      <h5 className="mb-2 text-lg font-bold tracking-tight text-gray-900 dark:text-white">
+                        {task.task_name}
+                      </h5>
+                      <p className="text-sm font-normal text-gray-700 dark:text-gray-400">
+                        {task.description.slice(0, 60)}
+                        {task.description && task.description.length > 60 && (
+                          <span className="text-blue-500">
+                            {' '}
+                            read more . . .
+                          </span>
+                        )}
+                      </p>
+                    </a>
+                  )
+                })}
             </div>
           </div>
         </div>
@@ -115,9 +128,19 @@ export default function Dashboard({ tasks }) {
 
 export async function getStaticProps() {
   let tasks = await Tasks()
-  return {
-    props: {
-      tasks: tasks.data,
-    },
+  if (tasks) {
+    return {
+      props: {
+        tasks: tasks.data,
+      },
+    }
+  } else {
+    return {
+      props: {
+        tasks: null,
+      },
+    }
   }
 }
+
+export default withProtected(Dashboard)
