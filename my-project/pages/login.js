@@ -1,13 +1,16 @@
+import React from 'react'
+import { withPublic } from '../src/hook/route'
 import Head from 'next/head'
 import Image from 'next/image'
 import { FaRegEnvelope } from 'react-icons/fa'
+import { FcGoogle } from 'react-icons/fc'
 import { MdLockOutline } from 'react-icons/md'
-import { useEffect, useState } from 'react'
-import SignUp, { SignIn } from '../utils/firebase'
+import { useState } from 'react'
 import { useRouter } from 'next/router'
 
-const Login = () => {
+const Login = ({ auth }) => {
   const router = useRouter()
+  const { signUp, login } = auth
   const [signInEmail, setSignInEmail] = useState('')
   const [signInPassword, setSignInPassword] = useState('')
   const [signUpEmail, setSignUpEmail] = useState('')
@@ -21,11 +24,10 @@ const Login = () => {
   const handleSignUp = async (e) => {
     e.preventDefault()
     try {
-      console.log(signUpPassword === confirmPassword)
-      if (signUpPassword === confirmPassword)
-        await SignUp(signUpEmail, signUpPassword)
-      else {
-        console.log('else')
+      if (signUpPassword === confirmPassword) {
+        await signUp(signUpEmail, signUpPassword)
+        router.push('/dashboard')
+      } else {
         isMatch(false)
         setIsMatchPassword(
           'flex w-64 items-center rounded-xl border-2 border-red-500 bg-gray-100 p-1'
@@ -37,7 +39,8 @@ const Login = () => {
   const handleSignIn = async (e) => {
     e.preventDefault()
     try {
-      SignIn(signInEmail, signInPassword)
+      // SignIn(signInEmail, signInPassword)
+      login(signInEmail, signInPassword)
     } catch (err) {}
   }
 
@@ -166,4 +169,4 @@ const Login = () => {
   )
 }
 
-export default Login
+export default withPublic(Login)
